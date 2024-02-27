@@ -1,6 +1,3 @@
-<h2 align="center"> EaseAer Tech Services </h2>
-
-
 <p align="center">
   <img width="200" height="55" src="EaseAer_Logo.png">
 </p>
