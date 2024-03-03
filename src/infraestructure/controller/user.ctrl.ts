@@ -139,15 +139,20 @@ export class UserController {
       followedUser,
       followersUser,
     } = req.body;
+
     try {
-      if (req.file) {
-        if (isImageFile(req.file)) {
-          console.log("FILE_YES");
+      if ("1"=="1") { // req.file
+        console.log("Register, STEP A");
+        if ("0"=="0") { // isImageFile(req.file)
+          console.log("Register, STEP B");
+          /* CLOUDINARY INSTRUCTIONS:
           const uploadRes = await cloudinary.uploader.upload(req.file.path, {
             upload_preset: "photoUser",
           });
+          */
 
-          if (uploadRes) {
+          if ("2"=="2") { // uploadRes
+            console.log("Register, STEP C");
             const user = new UserAuthValue({
               uuid: uuid,
               appUser: appUser,
@@ -155,7 +160,7 @@ export class UserController {
               surnameUser: surnameUser,
               mailUser: mailUser,
               passwordUser: passwordUser,
-              photoUser: uploadRes.secure_url,
+              photoUser: "URL Here", // uploadRes.secure_url
               birthdateUser: birthdateUser,
               genderUser: genderUser,
               ocupationUser: ocupationUser,
@@ -166,17 +171,16 @@ export class UserController {
               followersUser: followersUser,
               followedUser: followedUser,
             });
-            console.log("Hey");
+            console.log("Register, STEP D");
             const response = await this.userUseCase.registerUser(user);
-            console.log(response);
+            console.log("Register, STEP E: " + response);
             res.send(response);
-            console.log(response);
+            console.log("Register, STEP F: " + res);
           }
         } else {
           res.send("NOT_SENDING_AN_IMAGE");
         }
       } else {
-        console.log("How");
         const responseUser = await this.userUseCase.registerUser(req.body);
         if (responseUser === "ALREADY_USER") {
           res.status(403);
@@ -187,24 +191,8 @@ export class UserController {
         }
       }
     } catch (error) {
-      console.log("RegisterUserCtrl not working");
+      console.log("RegisterUserCtrl Not Working");
     }
-
-    //const user = response as UserAuthEntity;
-
-    /*const sender = 'grupo3ea.eetac@gmail.com';
-        const recipient = user.mailUser;
-        const subject = 'Bienvenido a mi aplicación';
-        const skelleton = 'Hola ' + user.nameUser + ',\n\nBienvenido a mi aplicación. ¡Gracias por registrarte!';
-
-        try {
-        await this.emailService.sendEmail(sender, recipient, subject, skelleton);
-        console.log('Correo electrónico enviado a ' + recipient);
-        } catch (err) {
-        console.error('Error al enviar el correo electrónico', err);
-        }*/
-
-    //res.send(response);
   }
 
   public async loginUserCtrl({ body }: Request, res: Response) {

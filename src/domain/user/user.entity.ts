@@ -6,14 +6,13 @@ export interface UserEntity {
   mailUser: string;
   photoUser: string;
   birthdateUser: Date;
-  genderUser: "male" | "female";
-  ocupationUser?: string;
+  genderUser: "male" | "female" | "other";
   descriptionUser: string;
-  roleUser: "admin" | "common" | "verified" | "business";
+  roleUser: "pax" | "company" | "admin" | "tech";
   privacyUser: boolean;
+  recordGameUser: number;
+  flightsUser: [string];
   deletedUser: boolean;
-  followersUser?: [string];
-  followedUser?: [string];
 }
 
 export interface AuthEntity {

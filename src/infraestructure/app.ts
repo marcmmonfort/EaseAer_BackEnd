@@ -31,11 +31,6 @@ const httpServer = createServer(appo);
 app.use(cors());
 app.use(express.json());
 
-/*const server = http.createServer(app);
-const socket = require('socket.io');
-const io = socket(server);
-
-createSocketServer(io);*/
 const io = new Server(httpServer, {
   cors: {
     origin: corsOrigin,

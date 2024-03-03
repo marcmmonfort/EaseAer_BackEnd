@@ -5,90 +5,7 @@ import { NotFoundError } from "./notFoundError";
 export class UserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  public getUserById = async (uuid: string) => {
-    const user = await this.userRepository.getUserById(uuid);
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-    return user;
-  };
-  public getUserByEmail = async (email: string) => {
-    const user = await this.userRepository.getUserByEmail(email);
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-    console.log(user);
-    return user;
-  };
-
-  public listUser = async () => {
-    const listUser = await this.userRepository.listUser();
-    if (!listUser) {
-      throw new NotFoundError("List not found");
-    }
-    return listUser;
-  };
-
-  public updateUser = async (
-    uuid: string,
-    {
-      appUser,
-      nameUser,
-      surnameUser,
-      mailUser,
-      photoUser,
-      birthdateUser,
-      genderUser,
-      ocupationUser,
-      descriptionUser,
-      roleUser,
-      privacyUser,
-      deletedUser,
-      followedUser,
-      followersUser,
-    }: {
-      appUser: string;
-      nameUser: string;
-      surnameUser: string;
-      mailUser: string;
-      photoUser: string;
-      birthdateUser: Date;
-      genderUser: "male" | "female";
-      ocupationUser?: string;
-      descriptionUser: string;
-      roleUser: "admin" | "common" | "verified" | "business";
-      privacyUser: boolean;
-      deletedUser: boolean;
-      followersUser?: [string];
-      followedUser?: [string];
-    }
-  ) => {
-    const userValue: UserValue = new UserValue({
-      uuid,
-      appUser,
-      nameUser,
-      surnameUser,
-      mailUser,
-      photoUser,
-      birthdateUser,
-      genderUser,
-      ocupationUser,
-      descriptionUser,
-      roleUser,
-      privacyUser,
-      deletedUser,
-      followedUser,
-      followersUser,
-    });
-    console.log(userValue);
-    const user = await this.userRepository.updateUser(uuid, userValue);
-    console.log(user);
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-    return user;
-  };
-
+  // CASE 1: registerUser(data: UserAuthEntity) ---> UserAuthEntity
   public registerUser = async ({
     uuid,
     appUser,
@@ -99,13 +16,12 @@ export class UserUseCase {
     photoUser,
     birthdateUser,
     genderUser,
-    ocupationUser,
     descriptionUser,
     roleUser,
     privacyUser,
+    recordGameUser,
+    flightsUser,
     deletedUser,
-    followedUser,
-    followersUser,
   }: {
     uuid: string;
     appUser: string;
@@ -115,14 +31,13 @@ export class UserUseCase {
     passwordUser: string;
     photoUser: string;
     birthdateUser: Date;
-    genderUser: "male" | "female";
-    ocupationUser?: string;
+    genderUser: "male" | "female" | "other";
     descriptionUser: string;
-    roleUser: "admin" | "common" | "verified" | "business";
+    roleUser: "pax" | "company" | "admin" | "tech";
     privacyUser: boolean;
+    recordGameUser: number;
+    flightsUser: [string];
     deletedUser: boolean;
-    followersUser?: [string];
-    followedUser?: [string];
   }) => {
     const userAuthValue = new UserAuthValue({
       uuid,
@@ -134,21 +49,67 @@ export class UserUseCase {
       photoUser,
       birthdateUser,
       genderUser,
-      ocupationUser,
       descriptionUser,
       roleUser,
       privacyUser,
+      recordGameUser,
+      flightsUser,
       deletedUser,
-      followedUser,
-      followersUser,
     });
     const user = await this.userRepository.registerUser(userAuthValue);
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError("CANNOT_REGISTER_USER");
     }
     return user;
   };
 
+  // CASE 2: getUserById(uuid: string) ---> UserEntity
+  public getUserById = async (uuid: string) => {
+    const user = await this.userRepository.getUserById(uuid);
+    if (!user) {
+      throw new NotFoundError("CANNOT_GET_USER_BY_ID");
+    }
+    return user;
+  };
+
+  // CASE 3: getUserByEmail(email: string) ---> UserEntity
+  public getUserByEmail = async (email: string) => {
+    const user = await this.userRepository.getUserByEmail(email);
+    if (!user) {
+      throw new NotFoundError("CANNOT_GET_USER_BY_EMAIL");
+    }
+    console.log(user);
+    return user;
+  };
+
+  // CASE 4: getSearchUsers(search: string) ---> UserEntity[]
+  public getSearchUsers = async (search: string) => {
+    const discovery = await this.userRepository.getSearchUsers(search);
+    return discovery;
+  };
+
+  // CASE 5: getNumUsers() ---> string
+  public getNumUsers = async () => {
+    const numUsers = await this.userRepository.getNumUsers();
+    return numUsers;
+  };
+
+  // CASE 6: listUser() ---> UserEntity[]
+  public listUser = async () => {
+    const listUser = await this.userRepository.listUser();
+    if (!listUser) {
+      throw new NotFoundError("CANNOT_LIST_USERS");
+    }
+    return listUser;
+  };
+
+  // CASE 7: listUserPag(numPage: string) ---> UserEntity[]
+  public listUserPag = async (numPage: string) => {
+    const listUser = await this.userRepository.listUserPag(numPage);
+    return listUser;
+  };
+
+  // CASE 8: loginUser(data: AuthEntity) ---> string[2]
   public loginUser = async ({
     mailUser,
     passwordUser,
@@ -159,12 +120,13 @@ export class UserUseCase {
     const userAuthValue = new AuthValue({ mailUser, passwordUser });
     const loginUser = await this.userRepository.loginUser(userAuthValue);
     if (!loginUser) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError("USER_NOT_FOUND");
     }
     return loginUser;
   };
 
-  public loginFrontendUser = async ({
+  // CASE 9: loginFrontEndUser(data: AuthEntity) ---> string[2]
+  public loginFrontEndUser = async ({
     mailUser,
     passwordUser,
   }: {
@@ -172,100 +134,77 @@ export class UserUseCase {
     passwordUser: string;
   }) => {
     const userAuthValue = new AuthValue({ mailUser, passwordUser });
-    const loginUser = await this.userRepository.loginFrontendUser(
+    const loginUser = await this.userRepository.loginFrontEndUser(
       userAuthValue
     );
     if (!loginUser) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError("USER_NOT_FOUND");
     }
     return loginUser;
   };
 
-  public loginFrontendGoogleUser = async ({
-    mailUser,
-    passwordUser,
-  }: {
-    mailUser: string;
-    passwordUser: string;
-  }) => {
-    const userAuthValue = new AuthValue({ mailUser, passwordUser });
-    console.log("El userAuthValue es: mailUser:" + mailUser);
-    const loginUser = await this.userRepository.loginFrontendGoogleUser(
-      userAuthValue
-    );
-    console.log("Respuesta loginUser: " + loginUser);
-    if (!loginUser) {
-      throw new NotFoundError("User not found");
+  // CASE 10: updateUser(uuid: string, data: UserEntity) ---> UserEntity
+  public updateUser = async (
+    uuid: string,
+    {
+      appUser,
+      nameUser,
+      surnameUser,
+      mailUser,
+      photoUser,
+      birthdateUser,
+      genderUser,
+      descriptionUser,
+      roleUser,
+      privacyUser,
+      recordGameUser,
+      flightsUser,
+      deletedUser,
+    }: {
+      appUser: string;
+      nameUser: string;
+      surnameUser: string;
+      mailUser: string;
+      photoUser: string;
+      birthdateUser: Date;
+      genderUser: "male" | "female" | "other";
+      descriptionUser: string;
+      roleUser: "pax" | "company" | "admin" | "tech";
+      privacyUser: boolean;
+      recordGameUser: number;
+      flightsUser: [string];
+      deletedUser: boolean;
     }
-    return loginUser;
+  ) => {
+    const userValue: UserValue = new UserValue({
+      uuid,
+      appUser,
+      nameUser,
+      surnameUser,
+      mailUser,
+      photoUser,
+      birthdateUser,
+      genderUser,
+      descriptionUser,
+      roleUser,
+      privacyUser,
+      recordGameUser,
+      flightsUser,
+      deletedUser,
+    });
+    console.log(userValue);
+    const user = await this.userRepository.updateUser(uuid, userValue);
+    console.log(user);
+    if (!user) {
+      throw new NotFoundError("USER_TO_UPDATE_NOT_FOUND");
+    }
+    return user;
   };
 
+  // CASE 11: deleteUser(uuid: string) ---> UserEntity
   public deleteUser = async (uuid: string) => {
     const user = await this.userRepository.deleteUser(uuid);
     return user;
   };
-
-  public listUserPag = async (numPage: string) => {
-    const listUser = await this.userRepository.listUserPag(numPage);
-    return listUser;
-  };
-
-  public getNumUsers = async () => {
-    const numUsers = await this.userRepository.getNumUsers();
-    return numUsers;
-  };
-
-  public getSearchUsers = async (search: string) => {
-    const discovery = await this.userRepository.getSearchUsers(search);
-    return discovery;
-  };
-
-  public listFollowersPag = async (uuid: string, numPage: string) => {
-    const listUser = await this.userRepository.listFollowersPag(uuid, numPage);
-    return listUser;
-  };
-
-  public listFollowedPag = async (uuid: string, numPage: string) => {
-    const listUser = await this.userRepository.listFollowedPag(uuid, numPage);
-    return listUser;
-  };
-
-  public checkFollower = async (uuid: string, uuidFollowed: string) => {
-    const check = await this.userRepository.checkFollower(uuid, uuidFollowed);
-    console.log("Use case. True o false: " + check);
-    return check;
-  };
-
-  public insertFollower = async (uuid: string, uuidFollower: string) => {
-    const follower = await this.userRepository.insertFollower(
-      uuid,
-      uuidFollower
-    );
-    return follower;
-  };
-
-  public insertFollowed = async (uuid: string, uuidFollowed: string) => {
-    const followed = await this.userRepository.insertFollowed(
-      uuid,
-      uuidFollowed
-    );
-    return followed;
-  };
-
-  public deleteFollower = async (uuid: string, uuidFollower: string) => {
-    const follower = await this.userRepository.deleteFollower(
-      uuid,
-      uuidFollower
-    );
-    return follower;
-  };
-
-  public deleteFollowed = async (uuid: string, uuidFollowed: string) => {
-    const followed = await this.userRepository.deleteFollowed(
-      uuid,
-      uuidFollowed
-    );
-    console.log("UseCase:" + followed);
-    return followed;
-  };
+  
 }

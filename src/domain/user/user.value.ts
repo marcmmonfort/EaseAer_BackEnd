@@ -8,15 +8,13 @@ export class UserValue implements UserEntity {
   mailUser: string;
   photoUser: string;
   birthdateUser: Date;
-  genderUser: "male" | "female";
-  ocupationUser?: string;
+  genderUser: "male" | "female" | "other";
   descriptionUser: string;
-  roleUser: "admin" | "common" | "verified" | "business";
+  roleUser: "pax" | "company" | "admin" | "tech";
   privacyUser: boolean;
+  recordGameUser: number;
+  flightsUser: [string];
   deletedUser: boolean;
-  followersUser?: [string];
-  followedUser?: [string];
-
   constructor({
     uuid,
     appUser,
@@ -26,13 +24,12 @@ export class UserValue implements UserEntity {
     photoUser,
     birthdateUser,
     genderUser,
-    ocupationUser,
     descriptionUser,
     roleUser,
     privacyUser,
+    recordGameUser,
+    flightsUser,
     deletedUser,
-    followedUser,
-    followersUser,
   }: {
     uuid: string;
     appUser: string;
@@ -41,30 +38,28 @@ export class UserValue implements UserEntity {
     mailUser: string;
     photoUser: string;
     birthdateUser: Date;
-    genderUser: "male" | "female";
-    ocupationUser?: string;
+    genderUser: "male" | "female" | "other";
     descriptionUser: string;
-    roleUser: "admin" | "common" | "verified" | "business";
+    roleUser: "pax" | "company" | "admin" | "tech";
     privacyUser: boolean;
+    recordGameUser: number;
+    flightsUser: [string];
     deletedUser: boolean;
-    followersUser?: [string];
-    followedUser?: [string];
   }) {
-    this.uuid = uuid;
-    this.appUser = appUser;
-    this.nameUser = nameUser;
-    this.surnameUser = surnameUser;
-    this.mailUser = mailUser;
-    this.photoUser = photoUser;
-    this.birthdateUser = birthdateUser;
-    this.genderUser = genderUser;
-    this.ocupationUser = ocupationUser ?? "default";
-    this.descriptionUser = descriptionUser;
-    this.roleUser = roleUser;
-    this.privacyUser = privacyUser;
-    this.deletedUser = deletedUser;
-    this.followedUser = followedUser;
-    this.followersUser = followersUser;
+    this.uuid = uuid,
+    this.appUser = appUser,
+    this.nameUser = nameUser,
+    this.surnameUser = surnameUser,
+    this.mailUser = mailUser,
+    this.photoUser = photoUser,
+    this.birthdateUser = birthdateUser,
+    this.genderUser = genderUser,
+    this.descriptionUser = descriptionUser,
+    this.roleUser = roleUser,
+    this.privacyUser = privacyUser,
+    this.recordGameUser = recordGameUser,
+    this.flightsUser = flightsUser,
+    this.deletedUser = deletedUser
   }
 }
 
@@ -93,15 +88,13 @@ export class UserAuthValue implements UserAuthEntity {
   passwordUser: string;
   photoUser: string;
   birthdateUser: Date;
-  genderUser: "male" | "female";
-  ocupationUser?: string;
+  genderUser: "male" | "female" | "other";
   descriptionUser: string;
-  roleUser: "admin" | "common" | "verified" | "business";
+  roleUser: "pax" | "company" | "admin" | "tech";
   privacyUser: boolean;
+  recordGameUser: number;
+  flightsUser: [string];
   deletedUser: boolean;
-  followersUser?: [string];
-  followedUser?: [string];
-
   constructor({
     uuid,
     appUser,
@@ -112,13 +105,12 @@ export class UserAuthValue implements UserAuthEntity {
     photoUser,
     birthdateUser,
     genderUser,
-    ocupationUser,
     descriptionUser,
     roleUser,
     privacyUser,
+    recordGameUser,
+    flightsUser,
     deletedUser,
-    followedUser,
-    followersUser,
   }: {
     uuid: string;
     appUser: string;
@@ -128,29 +120,27 @@ export class UserAuthValue implements UserAuthEntity {
     passwordUser: string;
     photoUser: string;
     birthdateUser: Date;
-    genderUser: "male" | "female";
-    ocupationUser?: string;
+    genderUser: "male" | "female" | "other";
     descriptionUser: string;
-    roleUser: "admin" | "common" | "verified" | "business";
+    roleUser: "pax" | "company" | "admin" | "tech";
     privacyUser: boolean;
+    recordGameUser: number;
+    flightsUser: [string];
     deletedUser: boolean;
-    followersUser?: [string];
-    followedUser?: [string];
   }) {
     (this.uuid = uuid), (this.appUser = appUser);
-    this.nameUser = nameUser;
-    this.surnameUser = surnameUser;
-    this.mailUser = mailUser;
-    this.passwordUser = passwordUser;
-    this.photoUser = photoUser;
-    this.birthdateUser = birthdateUser;
-    this.genderUser = genderUser;
-    this.ocupationUser = ocupationUser ?? "default";
-    this.descriptionUser = descriptionUser;
-    this.roleUser = roleUser;
-    this.privacyUser = privacyUser;
-    this.deletedUser = deletedUser;
-    this.followedUser = followersUser;
-    this.followersUser = followersUser;
+    this.nameUser = nameUser,
+    this.surnameUser = surnameUser,
+    this.mailUser = mailUser,
+    this.passwordUser = passwordUser,
+    this.photoUser = photoUser,
+    this.birthdateUser = birthdateUser,
+    this.genderUser = genderUser,
+    this.descriptionUser = descriptionUser,
+    this.roleUser = roleUser,
+    this.privacyUser = privacyUser,
+    this.recordGameUser = recordGameUser,
+    this.flightsUser = flightsUser,
+    this.deletedUser = deletedUser
   }
 }
