@@ -12,35 +12,12 @@ const locationRepo = new MongoLocationRepository();
 const locationUseCase = new LocationUseCase(locationRepo);
 const locationCtrl = new LocationController(locationUseCase);
 
-locationRoute.get(
-  "/location/:uuid",
-  checkJwt,
-  locationCtrl.getLocationByIdCtrl
-); //Ok
-locationRoute.get(
-  "/locations/all",
-  logMiddleware,
-  locationCtrl.listLocationCtrl
-); //Ok
-locationRoute.get(
-  "/location/all/:numPage",
-  checkJwt,
-  locationCtrl.listLocationPagCtrl
-); //Ok
-locationRoute.get(
-  "/location/all/count/docs",
-  checkJwt,
-  locationCtrl.getNumLocationsCtrl
-); //ok
-
-locationRoute.put("/location/:uuid", checkJwt, locationCtrl.updateLocationCtrl); //ok
-
-locationRoute.post("/location/add", checkJwt, locationCtrl.insertLocationCtrl); //Ok
-
-locationRoute.delete(
-  "/location/:uuid",
-  checkAdmin,
-  locationCtrl.deleteLocationCtrl
-); //Ok
+locationRoute.post("/location/add", checkJwt, locationCtrl.insertLocationCtrl);
+locationRoute.get("/locations/all", logMiddleware, locationCtrl.listLocationCtrl);
+locationRoute.get("/location/all/:numPage", checkJwt, locationCtrl.listLocationPagCtrl);
+locationRoute.get("/location/:uuid", checkJwt, locationCtrl.getLocationByIdCtrl);
+locationRoute.put("/location/:uuid", checkJwt, locationCtrl.updateLocationCtrl);
+locationRoute.delete("/location/:uuid", checkAdmin, locationCtrl.deleteLocationCtrl);
+locationRoute.get("/location/all/count/docs", checkJwt, locationCtrl.getNumLocationsCtrl);
 
 export default locationRoute;

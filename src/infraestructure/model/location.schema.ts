@@ -21,9 +21,14 @@ const LocationSchema = new Schema(
       type: String,
       required: true,
     },
-    descriptionLocation: {
+    typeLocation: {
       type: String,
-      required: false,
+      enum: ["shop", "service"],
+      required: true,
+    },
+    deletedLocation: {
+      type: Boolean,
+      required: true,
     },
   },
   {

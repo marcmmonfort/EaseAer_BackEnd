@@ -9,23 +9,17 @@ const RatingsSchema = new Schema(
       required: true,
       unique: true,
     },
-    ratingType: {
+    typeRating: {
       type: String,
-      enum: ["users", "activities", "locations", "comments", "publications"],
+      enum: ["news", "service", "shop", "product"],
       required: true,
     },
-    idRatedObject: {
+    idObjectRating: {
       type: String,
       required: true,
       validate: {
         validator: async function (value: string) {
-          const collections = [
-            "users",
-            "activities",
-            "locations",
-            "comments",
-            "publications",
-          ];
+          const collections = ["news", "service", "shop", "product"];
           for (const collection of collections) {
             const result = await model(collection)
               .findOne({ _id: value })
@@ -38,23 +32,18 @@ const RatingsSchema = new Schema(
         },
       },
     },
-    /*
-    idRatedObject:{
-        type: Schema.Types.ObjectId,
-        ref: function () {
-            return this.ratingType;
-        },
-        required:true,
-    },
-    */
-    ratingAverage: {
+    averageRating: {
       type: Number,
       required: true,
     },
-    idRaters: {
+    idsUsersRating: {
       type: [Schema.Types.ObjectId],
       ref: "users",
       required: false,
+    },
+    commentRating: {
+      type: String,
+      required: true,
     },
   },
   {

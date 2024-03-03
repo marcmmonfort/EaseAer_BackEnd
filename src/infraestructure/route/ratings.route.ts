@@ -10,38 +10,22 @@ const ratingsRepo = new MongoRatingsRepository();
 const ratingsUseCase = new RatingsUseCase(ratingsRepo);
 const ratingsCtrl = new RatingsController(ratingsUseCase);
 
-// (GET) getAllRatings()
-routeRatings.get("/ratings/all", checkJwt, ratingsCtrl.getAllRatingsCtrl); // ¡Verificada!
+// CASE 1: getAllRatings(): Promise<RatingsEntity | null>;
+routeRatings.get("/ratings/all", checkJwt, ratingsCtrl.getAllRatingsCtrl);
 
-// (GET) getUsersWhoHaveRated(uuid: string)
-routeRatings.get(
-  "/rating/getraters/:uuid",
-  checkJwt,
-  ratingsCtrl.getUsersWhoHaveRatedCtrl
-); // ¡Verificada!
+// CASE 2: getUsersWhoHaveRated(uuid: string): Promise<UserEntity[] | null>;
+routeRatings.get("/rating/getraters/:uuid", checkJwt, ratingsCtrl.getUsersWhoHaveRatedCtrl);
 
-// (GET) getAverageValueRating(idRatedObject: string, ratingType: string)
-routeRatings.get(
-  "/rating/getaverage/:idRatedObject/:ratingType",
-  checkJwt,
-  ratingsCtrl.getAverageValueRatingCtrl
-); // No acaba de ir.
+// CASE 3: insertRating(data: RatingsEntity): Promise<RatingsEntity | null>;
+routeRatings.post("/rating/add", checkJwt, ratingsCtrl.insertRatingCtrl);
 
-// (GET) getRating(idRatedObject: string, ratingType: string)
-routeRatings.get(
-  "/rating/get/:idRatedObject/:ratingType",
-  checkJwt,
-  ratingsCtrl.getRatingCtrl
-); // ¡Verificada!
+// CASE 4: updateRating(uuid: string, data: RatingsEntity): Promise<RatingsEntity | null>;
+routeRatings.put("/rating/update/:uuid", checkJwt, ratingsCtrl.updateRatingCtrl);
 
-// (POST) insertRating(data: RatingsEntity)
-routeRatings.post("/rating/add", checkJwt, ratingsCtrl.insertRatingCtrl); // ¡Verificada!
-
-// (PUT) updateRating(uuid: string, data: RatingsEntity)
-routeRatings.put(
-  "/rating/update/:uuid",
-  checkJwt,
-  ratingsCtrl.updateRatingCtrl
-); // ¡Verificada!
+// CASE 5: getAverageValueRating(idRatedObject: string, ratingType: string): Promise<number | null>;
+routeRatings.get("/rating/getaverage/:idRatedObject/:ratingType", checkJwt, ratingsCtrl.getAverageValueRatingCtrl); // No acaba de ir.
+  
+// CASE 6: getRating(idRatedObject: string, ratingType: string): Promise<RatingsEntity | null>;
+routeRatings.get("/rating/get/:idRatedObject/:ratingType", checkJwt, ratingsCtrl.getRatingCtrl);
 
 export default routeRatings;

@@ -3,5 +3,6 @@ export interface LocationEntity {
   nameLocation: string;
   latLocation: string;
   lonLocation: string;
-  descriptionLocation?: string;
+  typeLocation: "shop" | "service";
+  deletedLocation: boolean;
 }

@@ -1,12 +1,8 @@
 export interface RatingsEntity {
   uuid: string;
-  ratingType:
-    | "users"
-    | "activities"
-    | "locations"
-    | "comments"
-    | "publications";
-  idRatedObject: string;
-  ratingAverage: number;
-  idRaters?: [string];
+  typeRating: "news" | "service" | "shop" | "product";
+  idObjectRating: string;
+  averageRating: number;
+  idsUsersRating?: [string];
+  commentRating: string;
 }

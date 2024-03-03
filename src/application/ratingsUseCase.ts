@@ -5,8 +5,7 @@ import { NotFoundError } from "./notFoundError";
 export class RatingsUseCase {
   constructor(private readonly ratingsRepository: RatingsRepository) {}
 
-  // (1) getAllRatings():Promise<RatingsEntity|null>;
-
+  // CASE 1: getAllRatings() ---> RatingsEntity
   public getAllRatings = async () => {
     const ratings = await this.ratingsRepository.getAllRatings();
     if (!ratings) {
@@ -15,8 +14,7 @@ export class RatingsUseCase {
     return ratings;
   };
 
-  // (2) getUsersWhoHaveRated(uuid:string):Promise<UserEntity[]|null>;
-
+  // CASE 2: getUsersWhoHaveRated(uuid: string) ---> UserEntity[]
   public getUsersWhoHaveRated = async (uuid: string) => {
     const usersWhoHaveRated = await this.ratingsRepository.getUsersWhoHaveRated(
       uuid
@@ -27,32 +25,29 @@ export class RatingsUseCase {
     return usersWhoHaveRated;
   };
 
-  // (3) insertRating(data:RatingsEntity):Promise<RatingsEntity|null>;
-
+  // CASE 3: insertRating(data: RatingsEntity) ---> RatingsEntity
   public insertRating = async ({
     uuid,
-    ratingType,
-    idRatedObject,
-    ratingAverage,
-    idRaters,
+    typeRating,
+    idObjectRating,
+    averageRating,
+    idsUsersRating,
+    commentRating
   }: {
     uuid: string;
-    ratingType:
-      | "users"
-      | "activities"
-      | "locations"
-      | "comments"
-      | "publications";
-    idRatedObject: string;
-    ratingAverage: number;
-    idRaters?: [string];
+    typeRating: "news" | "service" | "shop" | "product";
+    idObjectRating: string;
+    averageRating: number;
+    idsUsersRating?: [string];
+    commentRating: string;
   }) => {
     const ratingValue = new RatingsValue({
       uuid,
-      ratingType,
-      idRatedObject,
-      ratingAverage,
-      idRaters,
+      typeRating,
+      idObjectRating,
+      averageRating,
+      idsUsersRating,
+      commentRating
     });
     const rating = await this.ratingsRepository.insertRating(ratingValue);
     if (!rating) {
@@ -61,69 +56,52 @@ export class RatingsUseCase {
     return rating;
   };
 
-  // (4) updateRating(uuid:string,data:RatingsEntity):Promise<RatingsEntity|null>;
-
+  // CASE 4: updateRating(uuid: string, data: RatingsEntity) ---> RatingsEntity
   public updateRating = async (
     uuid: string,
     {
-      ratingType,
-      idRatedObject,
-      ratingAverage,
-      idRaters,
+      typeRating,
+      idObjectRating,
+      averageRating,
+      idsUsersRating,
+      commentRating
     }: {
       uuid: string;
-      ratingType:
-        | "users"
-        | "activities"
-        | "locations"
-        | "comments"
-        | "publications";
-      idRatedObject: string;
-      ratingAverage: number;
-      idRaters?: [string];
+      typeRating: "news" | "service" | "shop" | "product";
+      idObjectRating: string;
+      averageRating: number;
+      idsUsersRating?: [string];
+      commentRating: string;
     }
   ) => {
     const newRatingValue = new RatingsValue({
       uuid,
-      ratingType,
-      idRatedObject,
-      ratingAverage,
-      idRaters,
+      typeRating,
+      idObjectRating,
+      averageRating,
+      idsUsersRating,
+      commentRating
     });
-    const newRating = await this.ratingsRepository.updateRating(
-      uuid,
-      newRatingValue
-    );
+    const newRating = await this.ratingsRepository.updateRating(uuid, newRatingValue);
     if (!newRating) {
       throw new NotFoundError("The updated rating can't be found!");
     }
     return newRating;
   };
 
-  // (5) getAverageValueRating(idRatedObject:string,ratingType:string):Promise<number|null>;
-
-  public getAverageValueRating = async (
-    idRatedObject: string,
-    ratingType: string
-  ) => {
-    const averageRate = await this.ratingsRepository.getAverageValueRating(
-      idRatedObject,
-      ratingType
-    );
-    if (!averageRate) {
+  // CASE 5: getAverageValueRating(idRatedObject: string, ratingType: string) ---> number
+  public getAverageValueRating = async (idObjectRating: string, typeRating: string) => {
+    const averageRating = await this.ratingsRepository.getAverageValueRating(idObjectRating, typeRating);
+    if (!averageRating) {
       throw new NotFoundError("There's no average rate!");
     } else {
-      return averageRate;
+      return averageRating;
     }
   };
-
-  // (6) getRating(idRatedObject:string,ratingType:string):Promise<RatingsEntity|null>;
-
-  public getRating = async (idRatedObject: string, ratingType: string) => {
-    const rate = await this.ratingsRepository.getRating(
-      idRatedObject,
-      ratingType
-    );
+  
+  // CASE 6: getRating(idRatedObject: string, ratingType: string) ---> RatingsEntity
+  public getRating = async (idObjectRating: string, typeRating: string) => {
+    const rate = await this.ratingsRepository.getRating(idObjectRating, typeRating);
     if (!rate) {
       throw new NotFoundError("This object doesn't have any rate!");
     } else {

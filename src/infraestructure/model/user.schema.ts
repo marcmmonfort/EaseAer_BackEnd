@@ -44,13 +44,9 @@ const UserSchema = new Schema(
       enum: ["male", "female"],
       required: true,
     },
-    ocupationUser: {
-      type: String,
-      required: false,
-    },
     descriptionUser: {
       type: String,
-      requiered: true,
+      required: true,
     },
     privacyUser: {
       type: Boolean,
@@ -58,21 +54,21 @@ const UserSchema = new Schema(
     },
     roleUser: {
       type: String,
-      enum: ["admin", "common", "verified", "business"],
+      enum: ["pax", "company", "admin", "tech"],
       required: true,
     },
     deletedUser: {
       type: Boolean,
       required: true,
     },
-    followersUser: {
+    flightsUser: {
       type: [Schema.Types.ObjectId],
-      ref: "users",
+      ref: "flights",
     },
-    followedUser: {
-      type: [Schema.Types.ObjectId],
-      ref: "users",
-    },
+    recordGameUser: {
+      type: Number,
+      required: false,
+    }
   },
   {
     timestamps: true,

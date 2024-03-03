@@ -2,38 +2,32 @@ import { RatingsEntity } from "./ratings.entity";
 
 export class RatingsValue implements RatingsEntity {
   uuid: string;
-  ratingType:
-    | "users"
-    | "activities"
-    | "locations"
-    | "comments"
-    | "publications";
-  idRatedObject: string;
-  ratingAverage: number;
-  idRaters?: [string];
+  typeRating: "news" | "service" | "shop" | "product";
+  idObjectRating: string;
+  averageRating: number;
+  idsUsersRating?: [string];
+  commentRating: string;
 
   constructor({
     uuid,
-    ratingType,
-    idRatedObject,
-    ratingAverage,
-    idRaters,
+    typeRating,
+    idObjectRating,
+    averageRating,
+    idsUsersRating,
+    commentRating
   }: {
     uuid: string;
-    ratingType:
-      | "users"
-      | "activities"
-      | "locations"
-      | "comments"
-      | "publications";
-    idRatedObject: string;
-    ratingAverage: number;
-    idRaters?: [string];
+    typeRating: "news" | "service" | "shop" | "product";
+    idObjectRating: string;
+    averageRating: number;
+    idsUsersRating?: [string];
+    commentRating: string;
   }) {
     this.uuid = uuid;
-    this.ratingType = ratingType;
-    this.idRatedObject = idRatedObject;
-    this.ratingAverage = ratingAverage;
-    this.idRaters = idRaters;
+    this.typeRating = typeRating;
+    this.idObjectRating = idObjectRating;
+    this.averageRating = averageRating;
+    this.idsUsersRating = idsUsersRating;
+    this.commentRating = commentRating;
   }
 }

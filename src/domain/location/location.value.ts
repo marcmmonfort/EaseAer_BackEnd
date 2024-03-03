@@ -5,25 +5,29 @@ export class LocationValue implements LocationEntity {
   nameLocation: string;
   latLocation: string;
   lonLocation: string;
-  descriptionLocation?: string;
+  typeLocation: "shop" | "service";
+  deletedLocation: boolean;
 
   constructor({
     uuid,
     nameLocation,
     latLocation,
     lonLocation,
-    descriptionLocation,
+    typeLocation,
+    deletedLocation
   }: {
     uuid: string;
     nameLocation: string;
     latLocation: string;
     lonLocation: string;
-    descriptionLocation: string;
+    typeLocation: "shop" | "service";
+    deletedLocation: boolean;
   }) {
-    this.uuid = uuid;
-    this.nameLocation = nameLocation;
-    this.latLocation = latLocation;
-    this.lonLocation = lonLocation;
-    this.descriptionLocation = descriptionLocation;
+    this.uuid = uuid,
+    this.nameLocation = nameLocation,
+    this.latLocation = latLocation,
+    this.lonLocation = lonLocation,
+    this.typeLocation = typeLocation,
+    this.deletedLocation = deletedLocation
   }
 }
