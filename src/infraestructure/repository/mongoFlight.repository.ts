@@ -5,190 +5,152 @@ import FlightModel from "../model/flight.schema";
 import { encrypt, verified } from "../utils/bcrypt.handle";
 import { generateToken } from "../utils/jwt.handle";
 
-// export class MongoFlightRepository implements FlightRepository {
+export class MongoFlightRepository implements FlightRepository {
 
     // CASE 1: getFlightById(uuid: string): Promise<FlightEntity | null>;
+    async getFlightById(uuid: string): Promise<any> {
+      const response = await FlightModel.findOne({ _id: uuid });
+      return response;
+    }
 
     // CASE 2: getFlightsByAirportAndInterval(airport: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
+    async getFlightsByAirportAndInterval(airport: string, startDate: Date, endDate: Date): Promise<any> {   
+      try {
+        const arrFlights = await FlightModel.find({
+            $and: [
+                { destinationFlight: airport },
+                { etaFlight: { $gte: startDate } },
+                { etaFlight: { $lte: endDate } }
+            ]
+        });
+        const depFlights = await FlightModel.find({
+          $and: [
+              { originFlight: airport },
+              { etdFlight: { $gte: startDate } },
+              { etdFlight: { $lte: endDate } }
+          ]
+        });
+        const flights = arrFlights.concat(depFlights);
+        return flights;
+      } catch (error) {
+        return "ANY_FLIGHTS_FOUND";
+      }
+    }
 
     // CASE 3: getDeparturesByAirportAndInterval(originFlight: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
+    async getDeparturesByAirportAndInterval(originFlight: string, startDate: Date, endDate: Date): Promise<any> {   
+      try {
+        const depFlights = await FlightModel.find({
+          $and: [
+              { originFlight: originFlight },
+              { etdFlight: { $gte: startDate } },
+              { etdFlight: { $lte: endDate } }
+          ]
+        });
+        return depFlights;
+      } catch (error) {
+        return "ANY_DEPARTURES_FOUND";
+      }
+    }
 
     // CASE 4: getArrivalsByAirportAndInterval(destinationFlight: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
+    async getArrivalsByAirportAndInterval(destinationFlight: string, startDate: Date, endDate: Date): Promise<any> {   
+      try {
+        const arrFlights = await FlightModel.find({
+          $and: [
+              { destinationFlight: destinationFlight },
+              { etaFlight: { $gte: startDate } },
+              { etaFlight: { $lte: endDate } }
+          ]
+        });
+        return arrFlights;
+      } catch (error) {
+        return "ANY_ARRIVALS_FOUND";
+      }
+    }
 
-    // CASE 5: getNumFlights(): Promise<Number | null>;
+    // CASE 5: getNumFlights(): Promise<String | null>;
+    async getNumFlights(): Promise<any> {
+      const response = (await FlightModel.countDocuments({})).toString();
+      return response;
+    }
 
     // CASE 6: getFlightsByCompany(companyName: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
+    async getFlightsByCompany(companyName: string, startDate: Date, endDate: Date): Promise<any> {   
+      try {
+        const arrFlights = await FlightModel.find({
+            $and: [
+                { companyFlight: companyName },
+                { etaFlight: { $gte: startDate } },
+                { etaFlight: { $lte: endDate } }
+            ]
+        });
+        const depFlights = await FlightModel.find({
+          $and: [
+              { companyFlight: companyName },
+              { etdFlight: { $gte: startDate } },
+              { etdFlight: { $lte: endDate } }
+          ]
+        });
+        const flights = arrFlights.concat(depFlights);
+        return flights;
+      } catch (error) {
+        return "ANY_FLIGHTS_FOUND";
+      }
+    }
 
     // CASE 7: createFlight(data: FlightEntity): Promise<FlightEntity | null | string>;
+    async createFlight(data: FlightEntity): Promise<any> {
+      const {
+        uuid,
+        numberFlight,
+        companyFlight,
+        originFlight,
+        destinationFlight, 
+        stdFlight,
+        etdFlight,
+        staFlight,
+        etaFlight,
+        depTerminalFlight,
+        statusFlight
+      } = data;
+      const flight = await FlightModel.create(data);
+      const flightUpdate = {
+        uuid: flight._id,
+        numberFlight,
+        companyFlight,
+        originFlight,
+        destinationFlight, 
+        stdFlight,
+        etdFlight,
+        staFlight,
+        etaFlight,
+        depTerminalFlight,
+        statusFlight
+      };
+      const response = await FlightModel.findOneAndUpdate(
+        { _id: flightUpdate.uuid },
+        flightUpdate,
+        { new: true }
+      );
+      console.log("Update Flight: " + response);
+      return response;
+    }
 
     // CASE 8: updateFlightById(uuid: string, data: FlightEntity): Promise<FlightEntity | null>;
+    async updateFlightById(uuid: string, data: FlightEntity): Promise<any> {
+      const response = await FlightModel.findOneAndUpdate({ _id: uuid }, data, {
+        new: true,
+      });
+      return response;
+    }
     
     // CASE 9: deleteFlight(uuid: string): Promise<FlightEntity | null>;
-  
-  /*
-  async registerUser(data: UserAuthEntity): Promise<any> {
-    console.log("Estoy en mongo");
-    const {
-      uuid,
-      appUser,
-      nameUser,
-      surnameUser,
-      mailUser,
-      passwordUser,
-      photoUser,
-      birthdateUser,
-      genderUser,
-      descriptionUser,
-      roleUser,
-      privacyUser,
-      recordGameUser,
-      flightsUser,
-      deletedUser
-    } = data;
-    const checkIs = await UserModel.findOne({ mailUser });
-    console.log("Mail de Registro: " + mailUser);
-    if (checkIs) return "ALREADY_USER";
-    const passHash = await encrypt(passwordUser);
-    const encryptedData = {
-      uuid,
-      appUser,
-      nameUser,
-      surnameUser,
-      mailUser,
-      passwordUser: passHash,
-      photoUser,
-      birthdateUser,
-      genderUser,
-      descriptionUser,
-      roleUser,
-      privacyUser,
-      recordGameUser,
-      flightsUser,
-      deletedUser
-    };
-    console.log(encryptedData);
-    const user = await UserModel.create(encryptedData);
-    const encryptedUpdate = {
-      uuid: user._id,
-      appUser,
-      nameUser,
-      surnameUser,
-      mailUser,
-      passwordUser: passHash,
-      photoUser,
-      birthdateUser,
-      genderUser,
-      descriptionUser,
-      roleUser,
-      privacyUser,
-      recordGameUser,
-      flightsUser,
-      deletedUser
-    };
-    const response = await UserModel.findOneAndUpdate(
-      { _id: encryptedUpdate.uuid },
-      encryptedUpdate,
-      { new: true }
-    );
-    console.log("Update User: " + response);
-    return response;
-  }
-
-  async getUserById(uuid: string): Promise<any> {
-    console.log(uuid);
-    const response = await UserModel.findOne({ _id: uuid });
-    console.log(response);
-    return response;
-  }
-
-  async getUserByEmail(mailUser: string): Promise<any> {
-    console.log(mailUser);
-    const response = await UserModel.findOne({ mailUser: mailUser });
-    if (!response) {
-      return "NOT_FOUND_USER";
+    async deleteFlight(uuid: string): Promise<any> {
+      const response = await FlightModel.findOneAndRemove({ _id: uuid });
+      return response;
     }
-    console.log(response);
-    return response;
-  }
 
-  async getSearchUsers(search: string): Promise<any> {
-    const responseUser = await UserModel.findOne({ appUser: search });
-
-    const regex = new RegExp(`^${search}`, "i");
-    const responseItem = await UserModel.find({ appUser: regex }).limit(10);
-
-    if (responseUser) {
-      return [responseUser, ...responseItem.slice(0, 9)];
-    } else {
-      return responseItem;
-    }
-  }
-
-  async getNumUsers(): Promise<any> {
-    const response = (await UserModel.countDocuments({})).toString();
-    return response;
-  }
-
-  async listUser(): Promise<any> {
-    const response = await UserModel.find();
-    console.log(response);
-    return response;
-  }
-
-  async listUserPag(numPage: string): Promise<any> {
-    const items = 2;
-    const hop = (parseInt(numPage, 10) - 1) * items;
-    const response = await UserModel.find({}).skip(hop).limit(items).exec();
-    return response;
-  }
-
-  async loginUser(data: AuthEntity): Promise<any> {
-    const { mailUser, passwordUser } = data;
-    const checkIs = await UserModel.findOne({ mailUser: mailUser });
-
-    if (!checkIs) return "NOT_FOUND_USER";
-
-    const passwordHash = checkIs.passwordUser;
-    const isCorrect = await verified(passwordUser, passwordHash);
-    if (!isCorrect) return "PASSWORD_INCORRECT";
-
-    if (checkIs.roleUser !== "admin") return "USER_NOT_ADMIN";
-
-    const token = generateToken(checkIs.mailUser, checkIs.roleUser);
-    const item = { token, user: checkIs };
-    return item;
-  }
-
-  async loginFrontEndUser(data: AuthEntity): Promise<any> {
-    const { mailUser, passwordUser } = data;
-    const checkIs = await UserModel.findOne({ mailUser: mailUser });
-
-    if (!checkIs) return "NOT_FOUND_USER";
-
-    const passwordHash = checkIs.passwordUser;
-    const isCorrect = await verified(passwordUser, passwordHash);
-    if (!isCorrect) return "PASSWORD_INCORRECT";
-
-    const token = generateToken(checkIs.mailUser, checkIs.roleUser);
-    const item = { token, user: checkIs };
-    return item;
-  }
-
-  async updateUser(uuid: string, data: UserEntity): Promise<any> {
-    const response = await UserModel.findOneAndUpdate({ _id: uuid }, data, {
-      new: true,
-    });
-    console.log(response);
-    return response;
-  }
-
-  async deleteUser(uuid: string): Promise<any> {
-    const response = await UserModel.findOneAndRemove({ _id: uuid });
-    return response;
-  }
-
-  */
-
-// }
+}
 
 

@@ -2,7 +2,7 @@ import { FlightRepository } from "../domain/flight/flight.repository";
 import { FlightValue } from "../domain/flight/flight.value";
 import { NotFoundError } from "./notFoundError";
 
-export class UserUseCase {
+export class FlightUseCase {
     constructor(private readonly flightRepository: FlightRepository) {}
 
     // CASE 1: getFlightById(uuid: string): Promise<FlightEntity | null>;
@@ -41,7 +41,7 @@ export class UserUseCase {
         return arrivals;
     };
 
-    // CASE 5: getNumFlights(): Promise<Number | null>;
+    // CASE 5: getNumFlights(): Promise<String | null>;
     public getNumFlights = async () => {
         const numberFlights = await this.flightRepository.getNumFlights();
         return numberFlights;
@@ -94,7 +94,6 @@ export class UserUseCase {
             depTerminalFlight,
             statusFlight,
         }: {
-            uuid: string;
             numberFlight: string;
             companyFlight: string;
             originFlight: string;

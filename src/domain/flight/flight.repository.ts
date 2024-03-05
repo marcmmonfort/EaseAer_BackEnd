@@ -10,7 +10,7 @@ export interface FlightRepository {
 
     getArrivalsByAirportAndInterval(destinationFlight: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
 
-    getNumFlights(): Promise<Number | null>;
+    getNumFlights(): Promise<String | null>;
 
     getFlightsByCompany(companyName: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
 
@@ -28,7 +28,7 @@ export interface FlightRepository {
 
     // CASE 4: getArrivalsByAirportAndInterval(destinationFlight: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
 
-    // CASE 5: getNumFlights(): Promise<Number | null>;
+    // CASE 5: getNumFlights(): Promise<String | null>;
 
     // CASE 6: getFlightsByCompany(companyName: string, startDate: Date, endDate: Date): Promise<FlightEntity[] | null>;
 
