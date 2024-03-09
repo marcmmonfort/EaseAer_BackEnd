@@ -1,6 +1,7 @@
 import { AuthEntity, UserEntity, UserAuthEntity } from "./user.entity";
 
 export interface UserRepository {
+  
   registerUser(data: UserAuthEntity): Promise<UserAuthEntity | null | string>;
 
   getUserById(uuid: string): Promise<UserEntity | null>;
