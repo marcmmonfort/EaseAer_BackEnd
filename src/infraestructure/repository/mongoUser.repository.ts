@@ -9,7 +9,6 @@ export class MongoUserRepository implements UserRepository {
   
   // CASE 1: registerUser(data: UserAuthEntity) ---> UserAuthEntity
   async registerUser(data: UserAuthEntity): Promise<any> {
-    console.log("Estoy en mongo");
     const {
       uuid,
       appUser,
@@ -67,6 +66,7 @@ export class MongoUserRepository implements UserRepository {
       flightsUser,
       deletedUser
     };
+    console.log("LLEGA AQUÍ B");
     const response = await UserModel.findOneAndUpdate(
       { _id: encryptedUpdate.uuid },
       encryptedUpdate,

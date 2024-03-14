@@ -45,18 +45,20 @@ export class UserController {
     } = req.body;
 
     try {
+      /*
       if ("1"=="1") { // req.file
         console.log("Register, STEP A");
         if ("0"=="0") { // isImageFile(req.file)
           console.log("Register, STEP B");
-          /* CLOUDINARY INSTRUCTIONS:
+          // CLOUDINARY INSTRUCTIONS:
           const uploadRes = await cloudinary.uploader.upload(req.file.path, {
             upload_preset: "photoUser",
           });
-          */
+          
 
           if ("2"=="2") { // uploadRes
             console.log("Register, STEP C");
+            */
             const user = new UserAuthValue({
               uuid: uuid,
               appUser: appUser,
@@ -74,9 +76,13 @@ export class UserController {
               flightsUser: flightsUser,
               deletedUser: deletedUser
             });
+            console.log("LLEGA AQUÍ");
             const response = await this.userUseCase.registerUser(user);
+            console.log("NO LLEGA AQUÍ");
             res.send(response);
+             /*
           }
+         
         } else {
           res.send("NOT_SENDING_AN_IMAGE");
         }
@@ -90,6 +96,7 @@ export class UserController {
           res.send(responseUser);
         }
       }
+      */
     } catch (error) {
       console.log("RegisterUserCtrl Not Working");
     }

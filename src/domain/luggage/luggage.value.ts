@@ -5,7 +5,7 @@ export class LuggageValue implements LuggageEntity {
     idUserLuggage: string;
     idFlightLuggage: string;
     infoLuggage: string;
-    statusLuggage: string;
+    statusLuggage: "waiting" | "admitted" | "security" | "presorting" | "finalsorting" | "handling" | "plane";
     deletedLuggage: boolean;
     constructor({
         uuid,
@@ -19,7 +19,7 @@ export class LuggageValue implements LuggageEntity {
         idUserLuggage: string;
         idFlightLuggage: string;
         infoLuggage: string;
-        statusLuggage: string;
+        statusLuggage: "waiting" | "admitted" | "security" | "presorting" | "finalsorting" | "handling" | "plane";
         deletedLuggage: boolean;
     }) {
         this.uuid = uuid,

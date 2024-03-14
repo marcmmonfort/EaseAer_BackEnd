@@ -18,7 +18,7 @@ export class LuggageUseCase {
             idUserLuggage: string;
             idFlightLuggage: string;
             infoLuggage: string;
-            statusLuggage: string;
+            statusLuggage: "waiting" | "admitted" | "security" | "presorting" | "finalsorting" | "handling" | "plane";
             deletedLuggage: boolean;
         }) => {
         const luggageValue = new LuggageValue({ 
@@ -82,7 +82,7 @@ export class LuggageUseCase {
             idUserLuggage: string;
             idFlightLuggage: string;
             infoLuggage: string;
-            statusLuggage: string;
+            statusLuggage: "waiting" | "admitted" | "security" | "presorting" | "finalsorting" | "handling" | "plane";
             deletedLuggage: boolean;
         }
       ) => {
